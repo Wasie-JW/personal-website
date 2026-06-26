@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 40px; }
+ /* STICKY SECTION NAV */
+  .sitenav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--navy);
+    border-bottom: 2px solid var(--white);
+  }
+  .sitenav-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  .sitenav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    text-decoration: none;
+    padding: 14px 16px;
+    white-space: nowrap;
+    border-bottom: 5px solid transparent;
+  }
+  .sitenav a:hover { color: var(--cream); border-bottom-color: var(--burgundy); }
+  /* HERO — full bleed navy block */
+  .hero {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 0 0 0;
+  }
+  .hero-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 64px 40px 56px;
+  }
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: rgba(245,242,234,0.55);
+    margin-bottom: 64px;
+  }
+  .hero-top .dot { color: var(--olive); }
+  h1.name {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 96px;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin: 0 0 28px;
+    text-transform: uppercase;
+  }
+  h1.name span { color: var(--burgundy); -webkit-text-stroke: 0; }
+  .role-line {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--cream);
+    margin: 0 0 20px;
+  }
+  .role-line .accent { color: #C9D6A8; }
+  p.pitch {
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(245,242,234,0.78);
+    max-width: 560px;
+    margin: 0 0 32px;
+  }
+  .hero-links {
+    display: flex;
+    gap: 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+  }
+  .hero-links a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 2px solid var(--burgundy);
+    padding-bottom: 2px;
+  }
+  .hero-links a:hover { border-color: var(--olive); }
+ 
+  /* SECTION HEADER */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 88px 0 28px;
+    scroll-margin-top: 64px;
+  }
+  .section-head h2 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .section-head .count {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+ 
+  /* FILTER BAR — signature element: bold tab strip */
+  .filter-block { margin-bottom: 36px; }
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .filter-row-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    width: 50px;
+    flex: 0 0 50px;
+  }
+  .row-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tag {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 9px 18px;
+    border: 2px solid var(--ink);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+  }
+  .tag.recent.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .tag.field.active { background: var(--olive); color: var(--white); border-color: var(--olive); }
+  .tag.tool.active { background: var(--burgundy); color: var(--white); border-color: var(--burgundy); }
+  .tag:not(.active) { border-color: rgba(20,23,28,0.25); color: var(--ink-soft); }
+ 
+  /* PROJECT GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+  .card {
+    background: var(--white);
+    padding: 26px 26px 22px;
+    border-top: 4px solid var(--navy);
+    transition: border-top-width 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .card:hover{
+    border-top-width: 8px;
+    transform: translateY(-2px);
+    box-shadow: 0 6px rgba(20,23,28,0.06);
+  }
+  .card.finance { border-top-color: var(--burgundy); }
+  .card.write { border-top-color: var(--olive); }
+  .card-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .card-title {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 1.15;
+    margin: 0 0 10px;
+  }
+  .card-desc {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .card-link {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    background: rgba(107,115,65,0.12);
+    color: var(--olive);
+    font-weight: 700;
+  }
+  .pill.tool { background: rgba(122,35,51,0.1); color: var(--burgundy); }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .skill-block {
+    background: var(--white);
+    padding: 24px;
+    border-top: 4px solid var(--navy);
+  }
+  .skill-block:nth-child(2) { border-top-color: var(--olive); }
+  .skill-block:nth-child(3) { border-top-color: var(--burgundy); }
+  .skill-block h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .skill-block p { margin: 0; font-size: 15px; line-height: 1.6; }
+ 
+  /* ABOUT */
+  .about-block {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    margin-bottom: 8px;
+  }
+  .about-text p {
+    font-size: 16.5px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin: 0 0 18px;
+  }
+  .about-text p:last-child { margin-bottom: 0; }
+  .about-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .fact {
+    border-left: 3px solid var(--burgundy);
+    padding-left: 14px;
+  }
+  .fact h5 {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    margin: 0 0 4px;
+  }
+  .fact p {
+    font-size: 14.5px;
+    margin: 0;
+    line-height: 1.5;
+  }
+ 
+  /* EXPERIENCE & EDUCATION */
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 24px;
+    padding: 22px 0;
+    border-top: 1px solid rgba(20,23,28,0.12);
+  }
+  .timeline-item:first-of-type { border-top: none; }
+  .timeline-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    padding-top: 3px;
+  }
+  .timeline-role {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    margin: 0 0 4px;
+  }
+  .timeline-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .timeline-item ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .timeline-item li {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .timeline-courses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  
+ 
+  /* CONTACT */
+  .contact-block {
+    background: var(--navy);
+    color: var(--cream);
+    padding: 48px 40px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 8px;
+  }
+  .contact-block h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 30px;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  .contact-block p {
+    font-size: 15px;
+    color: rgba(245,242,234,0.75);
+    margin: 0;
+    max-width: 360px;
+  }
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .contact-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 2px solid var(--burgundy);
+    padding-bottom: 2px;
+  }
+  .contact-links a:hover { border-color: var(--olive); }
+
+  footer {
+    margin-top: 90px;
+    padding: 32px 0 70px;
+    border-top: 3px solid var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+<!-- To do:
+  - revise all text to sound better
+  - revise Skills
+  - make a Polish version
+  - push some projects on GitHub and link github profile
+-->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-top">
+        <span><span class="dot">●</span> Available from July 2026</span>
+        <span>Warsaw, PL</span>
+      </div>
+      <h1 class="name">Julia<br><span>Wasielewska</span></h1>
+      <p class="role-line">Econometrics &amp; Data Science <span class="accent">→</span> exploring Data Analysis &amp; ML roles</p>
+      <p class="pitch">
+        University of Amsterdam student working across statistical modelling, machine learning, and
+        quantitative finance. I like solving problems that let me use theory and real data — recommendation
+        systems, causal inference, asset pricing, language models.
+      </p>
+      <div class="hero-links">
+        <a href="mailto:julia_wasielewska@wp.pl">Email</a>
+        <a href="https://www.linkedin.com/in/julia-wasielewska-789651255/">LinkedIn</a>
+        <a href="CV-Wasielewska-PL.pdf">CV ↓</a>
+      </div>
+    </div>
+  </section>
+ <nav class="sitenav">
+    <div class="sitenav-inner">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+  <div class="wrap">
+    <div class="section-head" id="about">
+      <h2>About</h2>
+    </div>
+    <div class="about-block">
+      <div class="about-text">
+        <p>
+          I'm a recent graduate in Econometrics &amp; Data Science from the University of Amsterdam, specialising
+          in Data Science. I like work that sits between rigorous statistical theory and messy real-world data —
+          whether that's estimating a model from first principles, building a retrieval pipeline over thousands
+          of documents, or figuring out why a regression won't behave.
+        </p>
+        <p>
+          My background is genuinely cross-disciplinary: causal inference and econometrics from my core degree,
+          machine learning and NLP from electives and my thesis, and quantitative finance from a strong personal
+          interest in markets. Across both coursework and a part-time role, I've built strong attention to detail,
+          analytical thinking, and a habit of taking ownership of my work — skills that transfer well to fast-moving
+          teams. I'm currently leaning toward data science and ML roles, but I care more about the problem than the
+          job title — I'm looking for a team where I can keep learning fast.
+        </p>
+        <p>
+          Outside of work: reading, yoga, dance, and creative writing — currently poetry and short fiction, with
+          an occasional attempt at writing musicals.
+        </p>
+      </div>
+      <div class="about-facts">
+        <div class="fact">
+          <h5>Based in</h5>
+          <p>Warsaw, Poland</p>
+        </div>
+        <div class="fact">
+          <h5>Available from</h5>
+          <p>July 2026</p>
+        </div>
+        <div class="fact">
+          <h5>Open to</h5>
+          <p>Data science, ML, and analytics roles</p>
+        </div>
+        </div>
+    </div>
+
+     <div class="section-head" id="projects">
+      <h2>Projects</h2>
+      <span class="count" id="project-count">15 total</span>
+    </div>
+ 
+    <div class="filter-block">
+      <div class="filter-row">
+        <div class="filter-row-label">View</div>
+        <div class="row-tags" id="row-recent"></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-row-label">Field</div>
+        <div class="row-tags" id="row-field"></div>
+      </div>
+      <div class="filter-row">
+        <div class="filter-row-label">Tool</div>
+        <div class="row-tags" id="row-tool"></div>
+      </div>
+    </div>
+ 
+    <div class="grid" id="project-grid"></div>
+    <p id="empty-state" style="display:none; font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft); padding:24px 0;">No projects match this filter yet.</p>
+    
+    <div class="section-head" id="skills">
+      <h2>Skills</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <h4>Tools</h4>
+        <p>Python, R, SQL, STATA, Tableau (similar to Power Bi), MS Office, SAS</p>
+      </div>
+      <div class="skill-block">
+        <h4>Methods</h4>
+        <p>Econometrics, causal inference, time series, ML, NLP</p>
+      </div>
+      <div class="skill-block">
+        <h4>Spoken languages</h4>
+        <p>Polish (native), English (fluent), French (B1), Dutch (A2)</p>
+      </div>
+    </div>
+
+
+    <div class="section-head" id="experience">
+      <h2>Experience</h2>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2022 – 2025</div>
+      <div>
+        <h3 class="timeline-role">Office Assistant - A&amp;W Biuro Konsultingowe Sp. z o.o.</h3>
+        <p class="timeline-sub">Warsaw, Poland</p>
+        <ul>
+          <li>Managed and organised incoming documentation, processing data efficiently in Excel.</li>
+          <li>Prepared official correspondence and supported internal communication on behalf of management.</li>
+          <li>Streamlined day-to-day administrative processes.</li>
+        </ul>
+      </div>
+    </div>
+ 
+
+    <div class="section-head" id="education">
+      <h2>Education</h2>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-date">2023 – 2026</div>
+      <div>
+        <h3 class="timeline-role">BSc Econometrics &amp; Data Science</h3>
+        <p class="timeline-sub">University of Amsterdam — specialisation in Data Science</p>
+        <p style="font-size: 14.5px; color: var(--ink-soft); line-height: 1.6; margin: 0;">
+          Built a foundation across econometrics, probability and statistics, and programming, with electives in
+          machine learning, NLP, and finance. In fall 2025, I went on exchange to HEC Montréal, where I focused on
+          international economics and finance, strategic management, and risk management — broadening my degree's
+          quantitative core with a closer look at organisational strategy and sustainability.
+        </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" id="contact">
+      <h2>Contact</h2>
+    </div>
+    <div class="contact-block">
+      <div>
+        <h3>Let's talk</h3>
+        <p>Open to roles in Data Analysis and ML with a focus on innovation and learning — available from July 2026. Reach out, or grab my CV below.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:julia_wasielewska@wp.pl">julia_wasielewska@wp.pl</a>
+        <a href="https://www.linkedin.com/in/julia-wasielewska-789651255/">LinkedIn</a>
+        <a href="CV-Wasielewska-PL.pdf">Download CV ↓</a>
+      </div>
+    </div>
+
+
+    <footer>
+      <span>© 2026 Julia Wasielewska, built with assistance of Claude (Anthropic)</span>
+      <span>Warsaw → anywhere</span>
+    </footer>
+
+  </div>
+
+
+  <script>
+  // ===== TAG REGISTRY ===== // ADDED LINE
+  // Single source of truth for every tag: which row it lives in (field / tool), 
+  // and how many projects must use it before it unlocks as a clickable filter. 
+  // To add a brand-new tag, just add one line here — no other code changes needed. 
+  const TAG_REGISTRY = { 
+    "Written analysis":  { row: "tool", threshold: 3 }, 
+    "Econometrics":      { row: "field", threshold: 3 }, 
+    "ML & NLP":          { row: "field", threshold: 3 }, 
+    "Quant finance":     { row: "field", threshold: 3 }, 
+    "Sustainability":    { row: "field", threshold: 2 }, 
+    "KPI tracking":      { row: "field", threshold: 2 },
+    "Risk management":   { row: "field", threshold: 3 }, 
+    "R":                 { row: "tool",  threshold: 2 }, 
+    "Python":            { row: "tool",  threshold: 2 }, 
+    "STATA":             { row: "tool",  threshold: 2 }, 
+    "Tableau":           { row: "tool",  threshold: 1 }, 
+    "Teamwork":          { row: "badge", threshold: Infinity } // ADDED LINE: badge = never becomes a clickable tab, just decorative
+  }; // ADDED LINE
+ 
+  // ---- DATA ---- // 
+  // colorClass controls the card's top-accent stripe: navy (default/general), 
+  // burgundy (finance), olive (written analysis/qualitative) 
+  // date format must be "<Season> <Year>" — recency is derived from this, not from manual ordering 
+  const projects = [
+    {
+      title: "Thesis — DPPs for politically diverse newsfeeds",
+      slug: "bcs-thesis",
+      date: "Summer 2026", 
+      desc: "Investigated how Determinantal Point Processes in recommendation models can balance user preference with reducing information bubbles in newsfeeds.",
+      tags: ["Written analysis", "ML & NLP", "Python"], 
+      colorClass: "olive"
+    },
+    {
+      title: "Transformer-based NLP applications",
+      slug:"transformer-nlp-app",
+      date: "Spring 2026", 
+      desc: "End-to-end NLP pipelines using transformer models — document retrieval, question answering, translation, and text classification, with a retrieval-based QA system using semantic chunking and vector embeddings.",
+      tags: ["ML & NLP", "Python", "Teamwork"], 
+      colorClass: "navy"
+    },
+    {
+      title: "AI chatbot with RAG architecture",
+      slug: "rag-chatbot",
+      date: "Spring 2026", 
+      desc: "English-language chatbot using a RAG pipeline over ~20,000 embedded document chunks with Chroma vector search, retrieving and synthesising French source documents into English responses.",
+      tags: ["ML & NLP", "Python"],
+      colorClass: "navy"
+    },
+    {
+      title: "Tableau dashboard for business simulation",
+      slug: "tableau-business-dashboard",
+      date: "Fall 2025", 
+      desc: "Interactive Tableau dashboard supporting profit-driven decisions in a business simulation, with KPI tracking across margin, sales, pricing, and inventory.",
+      tags: ["Tableau", "KPI tracking", "Teamwork"],
+      colorClass: "navy"
+    },
+    {
+      title: "Strategic management simulation",
+      slug: "strategic-management-sim",
+      date: "Fall 2025", 
+      desc: "Cross-functional business simulation requiring coordinated strategic decisions across pricing, operations, and resourcing.",
+      tags: ["Written analysis", "KPI tracking", "Teamwork"], 
+      colorClass: "olive"
+    },
+    {
+      title: "Quebec forestry stakeholder analysis",
+      slug: "quebec-forestry-analysis",
+      date: "Fall 2025", 
+      desc: "Stakeholder-based sociological analysis of Quebec forestry policy, mapping goals, constraints, and conflicts between actors into a structured policy analysis.",
+      tags: ["Written analysis", "Sustainability", "Teamwork"], 
+      colorClass: "olive"
+    },
+    {
+      title: "Brazil coffee plantations case study",
+      slug: "brazil-coffee-case-study",
+      date: "Fall 2025",
+      desc: "In-depth sociological analysis of sustainability, inequality, and economic structure in Brazilian coffee production, applying theoretical frameworks to a 10-page structured report.",
+      tags: ["Written analysis", "Sustainability", "Teamwork"], 
+      colorClass: "olive"
+    },
+    {
+      title: "Risk management — book publishing industry",
+      slug: "risk-book-publishing",
+      date: "Fall 2025", 
+      desc: "Analysis of operational and financial risk in book publishing, using frequency–severity prioritisation to propose improvements to existing risk practices.",
+      tags: ["Written analysis", "Risk management"], 
+      colorClass: "olive"
+    },
+    {
+      title: "Probit modelling in R",
+      slug: "probit-modelling-r",
+      date: "Spring 2025",
+      desc: "Maximum likelihood estimation for a probit model from scratch — log-likelihood and gradient functions coded manually, benchmarked against a Linear Probability Model with marginal-effects analysis.",
+      tags: ["Econometrics", "R"],
+      colorClass: "navy"
+    },
+    {
+      title: "Portfolio optimisation with ESG constraints",
+      slug: "portfolio-optimisation",
+      date: "Spring 2025", 
+      desc: "Mean-variance optimal portfolios on S&P 100 data with ESG and no-short-selling constraints, evaluated via in/out-of-sample Sharpe ratios, CAPM regressions, and GRS tests.",
+      tags: ["Quant finance", "R"], 
+      colorClass: "burgundy"
+    },
+    {
+      title: "Factor models & portfolio strategy",
+      slug: "factor-models",
+      date: "Spring 2025", 
+      desc: "PCA and Fama-French factor models for return covariance estimation; factor-based Markowitz portfolios benchmarked against classical approaches.",
+      tags: ["Quant finance", "R"], 
+      colorClass: "burgundy"
+    },
+    {
+      title: "Option pricing models",
+      slug: "option-pricing-models",
+      date: "Spring 2025",
+      desc: "Binomial tree models for European and barrier options benchmarked against Black-Scholes, with sensitivity analysis on volatility and dividend yield.",
+      tags: ["Quant finance", "R"], 
+      colorClass: "burgundy"
+    },
+    {
+      title: "Econometric simulation in R",
+      slug: "econometric-sim-r",
+      date: "Spring 2025",
+      desc: "Cobb-Douglas production function estimation and heteroskedasticity testing (Breusch-Pagan, White), with a 10,000-iteration simulation evaluating estimator properties.",
+      tags: ["Econometrics", "R"], 
+      colorClass: "navy"
+    },
+    {
+      title: "Education voucher experiment replication",
+      slug: "voucher-experiment-replication",
+      date: "Spring 2025", 
+      desc: "Replicated a randomised controlled trial on education outcomes, reproducing published results in STATA and applying causal inference to evaluate policy effectiveness.",
+      tags: ["Econometrics", "Written analysis", "STATA", "Teamwork"],
+      colorClass: "navy"
+    },
+    {
+      title: "Instrumental variables — economic development",
+      slug: "iv-replication",
+      date: "Spring 2025", 
+      desc: "Replicated a landmark study on institutions and economic development using instrumental variable regression to address endogeneity and interpret causal effects.",
+      tags: ["Econometrics", "Written analysis", "STATA", "Teamwork"], 
+      colorClass: "navy"
+    }
+  ];
+ 
+  // ---- DATE PARSING (replaces manual order numbers) ---- 
+  const SEASON_RANK = { "Winter": 0, "Spring": 1, "Summer": 2, "Fall": 3 }; 
+  function dateScore(dateStr) { 
+    // turns "Spring 2025" into a sortable number, e.g. 2025.1 — higher = more recent 
+    const [season, year] = dateStr.split(" "); 
+    return parseInt(year, 10) + (SEASON_RANK[season] ?? 0) / 10; 
+  } 
+  function sortByRecency(list) { 
+    return [...list].sort((a, b) => dateScore(b.date) - dateScore(a.date)); 
+  } 
+ 
+  // ---- TAG CONFIG ----  driven entirely by TAG_REGISTRY, auto-unlocks at threshold
+  function countTags() {
+    const counts = {}; 
+    projects.forEach(p => p.tags.forEach(t => counts[t] = (counts[t] || 0) + 1)); 
+    return counts;
+  } 
+  const tagCounts = countTags(); 
+ 
+  function unlockedTagsForRow(rowName) { 
+    return Object.keys(TAG_REGISTRY) 
+      .filter(tag => TAG_REGISTRY[tag].row === rowName) 
+      .filter(tag => (tagCounts[tag] || 0) >= TAG_REGISTRY[tag].threshold) 
+      .sort((a, b) => (tagCounts[b] || 0) - (tagCounts[a] || 0)); 
+  } // ADDED LINE
+  const fieldTags = unlockedTagsForRow("field"); 
+  const toolTags = unlockedTagsForRow("tool"); 
+ 
+  let activeFilter = { type: "recent", value: "Recent" };
+ 
+  function renderTags() {
+    const recentRow = document.getElementById("row-recent");
+    recentRow.innerHTML = "";
+    const recentTag = document.createElement("span");
+    recentTag.className = "tag recent" + (activeFilter.type === "recent" ? " active" : "");
+    recentTag.textContent = "Recent";
+    recentTag.onclick = () => { activeFilter = { type: "recent", value: "Recent" }; render(); };
+    recentRow.appendChild(recentTag);
+ 
+    const fieldRow = document.getElementById("row-field");
+    fieldRow.innerHTML = "";
+    fieldTags.forEach(tag => {
+      const el = document.createElement("span");
+      el.className = "tag field" + (activeFilter.type === "field" && activeFilter.value === tag ? " active" : "");
+      el.textContent = tag;
+      el.onclick = () => { activeFilter = { type: "field", value: tag }; render(); };
+      fieldRow.appendChild(el);
+    });
+ 
+    const toolRow = document.getElementById("row-tool");
+    toolRow.innerHTML = "";
+    toolTags.forEach(tag => {
+      const el = document.createElement("span");
+      el.className = "tag tool" + (activeFilter.type === "tool" && activeFilter.value === tag ? " active" : "");
+      el.textContent = tag;
+      el.onclick = () => { activeFilter = { type: "tool", value: tag }; render(); };
+      toolRow.appendChild(el);
+    });
+  }
+ 
+  function getFiltered() {
+    if (activeFilter.type === "recent") {
+      return sortByRecency(projects).slice(0, 5); 
+    }
+    if (activeFilter.type === "field" || activeFilter.type === "tool") { 
+      return sortByRecency(projects.filter(p => p.tags.includes(activeFilter.value))); 
+    }
+    return [];
+  }
+ 
+  function renderGrid() {
+    const grid = document.getElementById("project-grid");
+    const emptyState = document.getElementById("empty-state");
+    const list = getFiltered();
+    grid.innerHTML = "";
+    if (list.length === 0) {
+      grid.style.display = "none";
+      emptyState.style.display = "block";
+      return;
+    }
+    grid.style.display = "grid";
+    emptyState.style.display = "none";
+ 
+    list.forEach(p => {
+      const card = document.createElement("a");
+      card.href=`/projects/${p.slug}.html`;
+      card.className = "card " + (p.colorClass === "burgundy" ? "finance" : p.colorClass === "olive" ? "write" : "");
+ 
+      //  pills derived from the single tags array, styled by looking up each tag's row in TAG_REGISTRY
+      const allPills = p.tags.map(tag => { 
+        const row = TAG_REGISTRY[tag]?.row; 
+        const pillClass = row === "tool" ? "pill tool" : row === "badge" ? "pill badge" : "pill"; 
+        return `<span class="${pillClass}">${tag}</span>`; 
+      }).join(""); 
+ 
+      card.innerHTML = `
+        <span class="card-date">${p.date}</span>
+        <h3 class="card-title">${p.title}</h3>
+        <p class="card-desc">${p.desc}</p>
+        <div class="card-tags">${allPills}</div>
+        <span class="card-link">View project →</span>
+      `;
+      grid.appendChild(card);
+    });
+  }
+ 
+  function render() {
+    renderTags();
+    renderGrid();
+  }
+ 
+  render();
+</script>
+</body>
+</html>

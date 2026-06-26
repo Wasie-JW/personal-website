@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brazil Coffee Plantations · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--olive); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 38px;
+    line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 600px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 24px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 16px; line-height: 1.75; color: var(--ink); margin: 0 0 16px; }
+  .project-body ul { padding-left: 20px; margin: 0 0 16px; }
+  .project-body li { font-size: 16px; line-height: 1.7; margin-bottom: 8px; }
+ 
+  .ownership-note {
+    background: rgba(107,115,65,0.08);
+    border-left: 4px solid var(--olive);
+    padding: 14px 20px;
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .ownership-note strong { color: var(--olive); }
+ 
+  /* ACTOR MAP — full team's actor set, shown compactly as context */
+  .actor-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px;
+    margin: 8px 0 20px;
+  }
+  .actor-chip {
+    background: var(--white);
+    border-top: 3px solid rgba(20,23,28,0.15);
+    padding: 10px 8px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.3;
+    color: var(--ink-soft);
+  }
+  .actor-chip.mine {
+    border-top-color: var(--olive);
+    color: var(--olive);
+    font-weight: 700;
+    background: rgba(107,115,65,0.08);
+  }
+ 
+  /* QUOTE / FINDING CALLOUT */
+  .stat-callout {
+    background: var(--white);
+    border-left: 4px solid var(--burgundy);
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .stat-callout .num {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 28px; color: var(--burgundy);
+    display: block; margin-bottom: 4px;
+  }
+  .stat-callout p { margin: 0; font-size: 14.5px; color: var(--ink); }
+ 
+  /* THEORY TAG BLOCKS */
+  .theory-block {
+    background: var(--white);
+    border-top: 4px solid var(--navy);
+    padding: 22px 26px;
+    margin-bottom: 16px;
+  }
+  .theory-block h4 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 17px; margin: 0 0 10px;
+  }
+  .theory-block p { font-size: 14.5px; line-height: 1.65; margin: 0; color: var(--ink); }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Fall 2025 · Team Sociological Analysis</span>
+      </div>
+      <h1 class="project-title">Stakeholder Analysis of Brazil Coffee Plantations</h1>
+      <p class="project-intro">
+        A group report analysing how large-scale coffee farming in Brazil shapes local communities
+        and undermines ecological sustainability — mapping five actor groups, then applying
+        sociological theory to explain why the resulting power imbalance persists.
+      </p>
+      <div class="tag-row">
+        <span class="pill">Sustainability</span>
+        <span class="pill tool">Written Analysis</span>
+        <span class="pill badge">Teamwork</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">The full actor map</h2>
+      <p>
+        As a team, we mapped five actor groups shaping the Brazilian coffee industry, each with
+        different goals, resources, and leverage:
+      </p>
+      <div class="actor-row">
+        <div class="actor-chip">Coffee corporations</div>
+        <div class="actor-chip">Agribusiness &amp; large farms</div>
+        <div class="actor-chip">Locals &amp; Indigenous people</div>
+        <div class="actor-chip mine">Brazilian government<br>(mine)</div>
+        <div class="actor-chip">International governments</div>
+      </div>
+ 
+      <div class="ownership-note">
+        <strong>My contribution:</strong> I wrote the Brazilian government actor analysis and the
+        full theory-application section that follows — applying sociological theory to the team's
+        combined research to explain why the imbalance between these actors persists.
+      </div>
+ 
+      <h2 class="section-title">The government's bind</h2>
+      <p>
+        My section focused on the Brazilian government's structurally conflicted position: coffee
+        exports are a key source of national revenue, which gives the state an economic incentive
+        to keep production growing — even while it's also the body responsible for enforcing the
+        labour and environmental laws that growth tends to violate.
+      </p>
+      <ul>
+        <li>The Ministry of Labour's public "Dirty List" names employers using slave-like labour practices, but enforcement is inconsistent.</li>
+        <li>Satellite monitoring is used to detect illegal deforestation — funded by the same coffee export revenue the government has an incentive to protect.</li>
+        <li>The government also navigates international pressure, including EU deforestation rules and U.S. trade actions tied to forced labour.</li>
+      </ul>
+      <div class="stat-callout">
+        <span class="num">737,000 ha</span>
+        <p>Forest lost to coffee agriculture in Brazil between 2001–2023 — the scale the government's enforcement is meant to be containing.</p>
+      </div>
+ 
+      <h2 class="section-title">Applying theory: why the imbalance persists</h2>
+      <p>
+        The team's actor map showed unequal power. My theory section explained the mechanism behind it,
+        drawing on two frameworks:
+      </p>
+      <div class="theory-block">
+        <h4>Actor-Network Theory (Latour)</h4>
+        <p>
+          No actor's strategy works in isolation — corporations, farmers, government, and communities
+          are linked in a network where each actor's move shapes the others' options. Power in this
+          network comes from the density of an actor's connections, not from any single attribute:
+          corporations are powerful largely because they sit at the centre of consumer demand,
+          financial capital, and infrastructure simultaneously.
+        </p>
+      </div>
+      <div class="theory-block">
+        <h4>Racial capitalism &amp; the Capitalocene</h4>
+        <p>
+          Brazil's coffee economy has structural roots in 19th-century plantation systems, and
+          documented modern cases of forced labour suggest meaningful continuity rather than a clean
+          break from that history. Reading this through the Capitalocene frame — where capitalism
+          itself, not "humanity" in the abstract, is the driver of ecological harm — helped explain why
+          voluntary fixes like CSR certification tend to function as reputational cover rather than
+          structural change.
+        </p>
+      </div>
+ 
+      <h2 class="section-title">Where we landed</h2>
+      <p>
+        The report's conclusion, which I helped develop, argues that the harms documented aren't
+        accidents of an otherwise-functional system, but predictable outcomes of a market built to
+        prioritise profit over people and ecosystems. Real change would require shifting the
+        underlying power dynamics, not just adding more certifications on top of them — something
+        we framed around the idea of sustainable degrowth: producing less, simplifying supply
+        chains, and moving away from a profit-maximisation default.
+      </p>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="risk-book-publishing.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

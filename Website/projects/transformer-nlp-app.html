@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformer-based NLP applications · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  /* TOP BAR */
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px;
+    color: var(--cream); text-decoration: none;
+    border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  /* HEADER */
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px;
+    color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--navy); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 38px;
+    line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 600px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.tool { background: rgba(122,35,51,0.1); color: var(--burgundy); }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  /* TASK CARDS — this is the structural difference from the thesis template:
+     instead of one linear narrative, each sub-task gets its own self-contained block */
+  .project-body { padding: 44px 0 24px; }
+  .task-block {
+    background: var(--white);
+    border-top: 4px solid var(--navy);
+    padding: 28px 30px;
+    margin-bottom: 22px;
+  }
+  .task-block.task-2 { border-top-color: var(--burgundy); }
+  .task-block.task-3 { border-top-color: var(--olive); }
+  .task-number {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 6px; display: block;
+  }
+  .task-block h2 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 22px; margin: 0 0 12px;
+  }
+  .task-block p { font-size: 15.5px; line-height: 1.7; color: var(--ink); margin: 0 0 14px; }
+  .task-block p:last-child { margin-bottom: 0; }
+  .task-block ul { padding-left: 20px; margin: 0 0 14px; }
+  .task-block li { font-size: 15.5px; line-height: 1.65; margin-bottom: 6px; }
+  .task-meta-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+  }
+  .model-tag {
+    font-family: 'Space Mono', monospace; font-size: 12px; color: var(--navy);
+    background: rgba(27,42,65,0.07); padding: 3px 10px; border-radius: 4px;
+  }
+ 
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 24px; margin: 48px 0 18px;
+  }
+ 
+  /* CALLOUT — used here for the honest "metrics not yet computed" note */
+  .note-callout {
+    background: rgba(107,115,65,0.08);
+    border-left: 4px solid var(--olive);
+    padding: 16px 22px;
+    margin: 18px 0;
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .note-callout strong { color: var(--olive); }
+ 
+  .qa-example {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .qa-pair {
+    background: var(--cream);
+    border: 1px solid rgba(20,23,28,0.1);
+    border-radius: 4px;
+    padding: 12px 16px;
+  }
+  .qa-pair .q { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .qa-pair .a { font-size: 14px; font-weight: 600; }
+ 
+  .project-links { display: flex; gap: 14px; flex-wrap: wrap; margin: 32px 0 0; }
+  .project-links a {
+    font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700;
+    color: var(--white); background: var(--navy); text-decoration: none;
+    padding: 10px 18px; border-radius: 4px;
+  }
+  .project-links a:hover { background: var(--navy-deep); }
+  .project-links a.secondary {
+    background: transparent; color: var(--ink); border: 1.5px solid var(--ink);
+  }
+  .project-links a.secondary:hover { background: rgba(20,23,28,0.06); }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Spring 2026 · Group assignment</span>
+      </div>
+      <h1 class="project-title">Transformer-based NLP applications</h1>
+      <p class="project-intro">
+        A two-part assignment covering three distinct transformer applications: a retrieval-based
+        question-answering system, automated translation of category labels, and a fine-tuned text
+        classifier — built across one CPU and one GPU notebook.
+      </p>
+      <div class="tag-row">
+        <span class="pill">ML &amp; NLP</span>
+        <span class="pill tool">Python</span>
+        <span class="pill badge">Teamwork</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">The three tasks</h2>
+ 
+      <div class="task-block">
+        <span class="task-number">Task 1 — CPU</span>
+        <h2>Retrieval-based question answering</h2>
+        <p>
+          A chatbot that answers questions about a single source document — in our case, the original
+          BERT paper — by retrieving the most relevant passage before extracting an answer from it,
+          rather than trying to answer from the model's general knowledge alone.
+        </p>
+        <ul>
+          <li>Split the document into overlapping 3-sentence chunks using a sliding window, so context isn't lost at chunk boundaries.</li>
+          <li>Encoded each chunk into a vector with a sentence-transformer model, and encoded incoming questions the same way.</li>
+          <li>Retrieved the top-K most similar chunks to a given question, discarding any below a similarity threshold.</li>
+          <li>If no chunk cleared the threshold, the system returned "I don't think I can answer this question" rather than guessing.</li>
+          <li>Concatenated the surviving chunks into a single context string, then used a question-answering pipeline to extract the actual answer span.</li>
+        </ul>
+        <p>
+          We experimented with different values for the similarity threshold and top-K, since both directly
+          affect whether the system answers confidently, answers wrongly, or correctly declines.
+        </p>
+        <div class="task-meta-row">
+          <span class="model-tag">sentence-transformer (encoding)</span>
+          <span class="model-tag">QA pipeline (extraction)</span>
+        </div>
+      </div>
+ 
+      <div class="task-block task-2">
+        <span class="task-number">Task 2 — CPU</span>
+        <h2>Category translation</h2>
+        <p>
+          The classification task (below) uses a dataset of 14,000 Simplified Chinese news articles spread
+          across 14 categories. Before classifying anything, we translated the category labels themselves
+          into English using a pretrained translation model, then sanity-checked the results against an
+          online translation service.
+        </p>
+        <div class="task-meta-row">
+          <span class="model-tag">Helsinki-NLP/opus-mt-mul-en</span>
+        </div>
+      </div>
+ 
+      <div class="task-block task-3">
+        <span class="task-number">Task 3 — GPU</span>
+        <h2>News article classification</h2>
+        <p>
+          Fine-tuned a pretrained Chinese-language transformer to classify a news article into one of the
+          14 categories — going from a general-purpose language model to a task-specific classifier.
+        </p>
+        <ul>
+          <li>Split the dataset 80/10/10 into train/eval/test, stratified by category to keep each split balanced.</li>
+          <li>Tokenised all articles and built dataset objects for train, eval, and test.</li>
+          <li>Fine-tuned for 3 epochs at a learning rate of 2e-5, evaluating accuracy, precision, and recall after each epoch.</li>
+          <li>Evaluated final performance on the held-out test set and produced a confusion matrix to see which categories were most often confused with each other.</li>
+        </ul>
+        <div class="task-meta-row">
+          <span class="model-tag">Geotrend/distilbert-base-zh-cased</span>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Results</h2>
+      <p>
+        Both the QA system and the classifier performed sensibly — the QA system gave reasonable answers
+        for in-scope questions and correctly declined questions it had no basis to answer, and the fine-tuned
+        classifier learned to distinguish between the 14 news categories.
+      </p>
+      <div class="note-callout">
+        <strong>Note:</strong> we didn't formally log the final accuracy/precision/recall numbers or export the
+        confusion matrix from this run — if I revisit the notebook, I'd add the exact metrics here.
+      </div>
+ 
+      <h2 class="section-title">What I'd do differently</h2>
+      <p>
+        I'd log and save evaluation metrics and the confusion matrix at the time of training, rather than
+        relying on memory afterward — small thing, but it's the difference between being able to say
+        "it worked" and being able to say exactly how well.
+      </p>
+ 
+ 
+    </div>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="rag-chatbot.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>
