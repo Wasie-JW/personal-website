@@ -854,7 +854,7 @@
  
     list.forEach(p => {
       const card = document.createElement("a");
-      card.href=`/projects/${p.slug}.html`;
+      card.href=`projects/${p.slug}.html`;
       card.className = "card " + (p.colorClass === "burgundy" ? "finance" : p.colorClass === "olive" ? "write" : "");
  
       //  pills derived from the single tags array, styled by looking up each tag's row in TAG_REGISTRY
