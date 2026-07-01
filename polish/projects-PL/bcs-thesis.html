@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="PL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praca Licencjacka · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 800px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 800px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--olive); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 36px;
+    line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 620px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.tool { background: rgba(122,35,51,0.1); color: var(--burgundy); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 23px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 15.5px; line-height: 1.75; color: var(--ink); margin: 0 0 14px; }
+  .project-body ul { padding-left: 20px; margin: 0 0 14px; }
+  .project-body li { font-size: 15.5px; line-height: 1.7; margin-bottom: 8px; }
+ 
+  /* WHY DPPs — black box framing, two-column comparison */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 8px 0 8px; }
+  .why-card { background: var(--white); border-top: 4px solid rgba(20,23,28,0.2); padding: 20px 22px; }
+  .why-card.good { border-top-color: var(--olive); }
+  .why-card h4 {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); margin: 0 0 10px;
+  }
+  .why-card.good h4 { color: var(--olive); }
+  .why-card ul { padding-left: 16px; margin: 0; }
+  .why-card li { font-size: 14px; line-height: 1.6; margin-bottom: 6px; color: var(--ink); }
+ 
+  /* RESEARCH QUESTION */
+  .research-question {
+    background: var(--navy); color: var(--cream);
+    padding: 28px 32px; border-radius: 4px; margin: 8px 0 8px;
+  }
+  .research-question .label {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: rgba(245,242,234,0.6); display: block; margin-bottom: 10px;
+  }
+  .research-question p {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 20px;
+    line-height: 1.35; margin: 0; color: var(--cream);
+  }
+ 
+  /* THREE CONTRIBUTIONS — the part that must be visibly important */
+  .contributions { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 8px; }
+  .contribution-card {
+    background: var(--white);
+    border-left: 6px solid var(--burgundy);
+    padding: 22px 26px;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .contribution-card:nth-child(2) { border-left-color: var(--navy); }
+  .contribution-card:nth-child(3) { border-left-color: var(--olive); }
+  .contrib-num {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 32px;
+    color: rgba(20,23,28,0.15); line-height: 1;
+  }
+  .contrib-content h4 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 17px; margin: 0 0 8px;
+  }
+  .contrib-content p { font-size: 14.5px; line-height: 1.65; margin: 0 0 8px; color: var(--ink); }
+  .contrib-content p:last-child { margin-bottom: 0; }
+  .contrib-meta {
+    font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ink);
+    background: rgba(28, 20, 21, 0.05); display: inline-block; padding: 3px 9px; border-radius: 4px; margin-top: 4px;
+  }
+ 
+  /* KERNEL FORMULA BLOCK */
+  .formula-block {
+    background: var(--white);
+    border: 1.5px solid rgba(20,23,28,0.15);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 8px 0 8px;
+    text-align: center;
+  }
+  .formula {
+    font-family: 'Space Mono', monospace; font-size: 16px; color: var(--navy); font-weight: 700;
+    background: rgba(28, 20, 21, 0.05); display: inline-block; padding: 3px 9px; border-radius: 4px;
+  }
+  .formula-block .formula-caption {
+    font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ink-soft); margin-top: 10px;
+  }
+ 
+  /* PIPELINE SHOT*/
+  .pipeline-shot {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid rgba(20,23,28,0.15);
+    display: block;
+    margin: 8px 0 6px;
+  }
+  .shot-caption {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  /* PIPELINE */
+  .pipeline { display: flex; align-items: stretch; gap: 0; margin: 24px 0 8px; flex-wrap: wrap; }
+  .pipe-stage {
+    background: var(--white); border: 1.5px solid rgba(20,23,28,0.15); border-radius: 4px;
+    padding: 16px 14px; flex: 1; min-width: 130px; text-align: center;
+  }
+  .pipe-stage .step-num { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--burgundy); font-weight: 700; display: block; margin-bottom: 6px; }
+  .pipe-stage .step-title { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .pipe-stage .step-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+  .pipe-arrow { display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--ink-soft); padding: 0 6px; flex: 0 0 auto; }
+  /* STAT CALLOUTS */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0 8px; }
+  .stat-box { background: var(--white); border-top: 5px solid var(--burgundy); padding: 22px 18px; text-align: center; }
+  .stat-box.accent { border-top-color: var(--olive); }
+  .stat-box .big-num { font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 34px; color: var(--burgundy); display: block; line-height: 1; }
+  .stat-box.accent .big-num { color: var(--olive); }
+  .stat-box .stat-label { font-family: 'Space Mono', monospace; font-size: 11.5px; color: var(--ink-soft); margin-top: 8px; line-height: 1.4; }
+ 
+  .finding-block { background: var(--white); border-top: 4px solid var(--olive); padding: 24px 28px; margin: 16px 0; }
+  .finding-block h4 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 16.5px; margin: 0 0 10px; }
+  .finding-block p { font-size: 14.5px; line-height: 1.7; margin: 0 0 10px; color: var(--ink); }
+  .finding-block p:last-child { margin-bottom: 0; }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+ 
+  @media (max-width: 640px) {
+    .stat-grid, .why-grid { grid-template-columns: 1fr; }
+    .pipeline { flex-direction: column; }
+    .pipe-arrow { transform: rotate(90deg); padding: 4px 0; }
+    .contribution-card { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index-PL.html#projects">← Wszystkie projekty</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Lato 2026 · Praca Licencjacka</span>
+      </div>
+      <h1 class="project-title">Przebicie Bańki Informacyjnej: Różnorodność Rekomendacji w Newsfeedach Oparta na DPP</h1>
+      <p class="project-intro">
+        Obecne modele rekomendacyjne optymalizują kliknięcia, ale robiąc to zawężają zakres ideologiczny artykułów,
+         które czytasz. Moja praca szuka odpowiedzi na pytanie: Czy możemy to naprawić bez poświęcenia jakości Rekomendacji?
+      </p>
+      <div class="tag-row">
+        <span class="pill tool">Written analysis</span>
+        <span class="pill">ML &amp; NLP</span>
+        <span class="pill tool">Python</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+      <div class="research-question">
+        <span class="label">Pytanie Badawcze</span>
+        <p>"W jaki sposób DPP balansuje kompromis między preferencjami użytkowników a bańkami informacyjnymi w newsfeedach?"</p>
+      </div>
+
+      <h2 class="section-title">Dlaczego oparcie na DPP?</h2>
+      <p>
+        Systemy rekomendujące uczą się na podstawie danych o kliknięciach, więc pokazują więcej tego, co ich 
+        zdaniem uważasz za słuszne oraz co chciałbyś zobaczyć. W wiadomościach politycznych stawka jest wysoka: 
+        kształtuje to sposób, w jaki postrzegasz debatę publiczną, często bez Twojej wiedzy. Większość współczesnych
+        modeli rekomendujących opiera się na neuronach, więc nie wiadomo jakim własnościom przypisują wagę.
+      </p>
+      <div class="why-grid">
+        <div class="why-card">
+          <h4>Standardowe modele neuronowe</h4>
+          <ul>
+            <li>System punktacji trudny do sprawdzenia lub wyjaśnienia</li>
+            <li>Różnorodność dodana po punkacji, jeśli w ogóle dodana</li>
+            <li>Jakość i różnorodność traktowane jako konkurujące cele, balansowane ręcznie</li>
+          </ul>
+        </div>
+        <div class="why-card good">
+          <h4>Determinantowe Procesy Punktowe</h4>
+          <ul>
+            <li>Jakość i różnorodność modelowane łącznie w jednym probabilistycznym modelu</li>
+            <li>Czysta, interpretowalna architektura</li>
+            <li>Wolność w definiowaniu trafności i różnorodności</li>
+          </ul>
+        </div>
+      </div>
+      
+      <h2 class="section-title">Trzy wkłady</h2>
+ 
+      <div class="contributions">
+        <div class="contribution-card">
+          <span class="contrib-num">01</span>
+          <div class="contrib-content">
+            <h4>Klasyfikator Stronnictwa Politycznego (PLC)</h4>
+            <p>
+              Model DistilBERT dostrojony do przypisywania ciągłej punktacji ideologicznej (0 = lewa, 1 = prawa) 
+              każdemu artykułowi na podstawie samego tekstu, a nie wydawcy czy źródła.
+            </p>
+            <span class="contrib-meta">MSE 0.097 · MAE 0.23 na oddzielnej puli testowej</span>
+          </div>
+        </div>
+        <div class="contribution-card">
+          <span class="contrib-num">02</span>
+          <div class="contrib-content">
+            <h4>Niestandardowy kernel DPP + ε-zachłanna korekta</h4>
+            <p>
+              Budowa kernela łącząca podobieństwo semantyczne z rozbieżnością polityczną poprzez regulowany parametr β. </p>
+              <div class="formula">L<sub>ij</sub> = q<sub>i</sub> · [(1−β)S<sub>semantic,ij</sub> + βS<sub>political,ij</sub>] · q<sub>j</sub></div>
+            <p>
+              Dodatkowo wariant eksploracji ε-zachłannej, stworzony w celu przeciwdziałania problemowi uprzedzonych zbiorów kandydatów w hybrydowych modelach.
+            </p>
+          </div>
+        </div>
+        <div class="contribution-card">
+          <span class="contrib-num">03</span>
+          <div class="contrib-content">
+            <h4>Rygorystyczne porównanie offline</h4>
+            <p>
+              5 modeli przetestowanych na 12,902 użytkownikach i 6 metrykach — 3 miary dokładności (Precision@15,
+              Recall@15, NDCG@15) i 3 miary zróżnicowania (Intra-List Diversity, Political Variance,
+              Political Balance).
+            </p>
+          </div>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Jak działa system?</h2>
+      <img class="pipeline-shot" src="../../assets/thesis-flow.png" alt="Pipeline of the Recommender System going from Candidate Set building, through DPP kernel assembly, Fast Greedy MAP inference, and finally TOP-15 newsfeed shown to user">
+      <p class="shot-caption">Główny przebieg — od spersonalizowanego zestawu kandydatów, przez warstwę DPP, do wyboru 15 najlepszych kandydatów w interfejsie użytkownika.</p>
+ 
+      <h2 class="section-title">Testowane Modele</h2>
+      <div class="pipeline">
+        <div class="pipe-stage">
+          <span class="step-num">01</span>
+          <div class="step-title">NAML-lite Baseline</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-stage">
+          <span class="step-num">02</span>
+          <div class="step-title">Standalone DPP</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="step-num">03</span>
+          <div class="step-title">Standalone DPP with ε-greedy layer</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-stage">
+          <span class="step-num">04</span>
+          <div class="step-title">NAML-lite reranked by DPP</div>
+        </div>
+        <div class="pipe-stage">
+          <span class="step-num">05</span>
+          <div class="step-title">NAML-lite reranked by DPP with ε-greedy layer</div>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Rezultaty</h2>
+      <p>
+        W porównaniu z modelem bazowym opartym wyłączcnie na trafności (NAML-lite),
+        samodzielny model DPP wygenerował wyraźnie bardziej zróżnicowane newsfeedy 
+        bez istotnego obniżenia dokładności.
+      </p>
+      <div class="stat-grid">
+        <div class="stat-box accent">
+          <span class="big-num">+75%</span>
+          <span class="stat-label">wyższy balans polityczny niż model bazowy</span>
+        </div>
+        <div class="stat-box accent">
+          <span class="big-num">+160%</span>
+          <span class="stat-label">wyższe zróżnicowanie semantyczne niż model bazowy</span>
+        </div>
+        <div class="stat-box">
+          <span class="big-num">~0</span>
+          <span class="stat-label">znaczącej utraty dokładności w 5 testowanych modelach</span>
+        </div>
+      </div>
+ 
+      <div class="finding-block">
+        <h4>Zalety modeli hybrydowych
+        </h4>
+        <p>
+          W praktyce modele DPP są zazwyczaj wdrażane jako etap rerankingu na krótkiej liście kandydatów, która została
+          już przefiltrowana przez model oparty na dokładności. Obliczenia są wtedy szybsze, ponieważ aplikowanie DPP jest 
+          przeprowadzane na mniejszej liście. Przetestowałam tę konfigurację w modelach (4) i (5) i znacząco ograniczyła
+          ona różnorodność przy minimalnym wzroście dokładności.Po wstępnym odfiltrowaniu przez model trafności 100 
+          „najbardziej trafnych” artykułów, ta krótka lista jest już ideologicznie węższa niż pełna pula kandydatów, 
+          co pozostawia modelowi DPP mniej szans na dywersyfikację. 
+        </p>
+        <p>
+          Dodanie niewielkiej ilości losowości spowodowało konwergencję metryk z powrotem do poziomu samodzielnego modelu 
+          DPP. Wariant ε-chciwy czasami pobiera próbki z globalnej puli kandydatów, co przywraca swobodę eksploracji 
+          modelu DPP. Kompromis: rezygnacja z korzyści w zakresie dokładności, jakie przyniósł etap wstępnego filtrowania.
+          Cały system można dostroić zmieniając β i ε.
+        </p>
+      </div>
+ 
+      <h2 class="section-title">Ograniczenia</h2>
+      <p>
+        Metryki dokładności (Precision, Recall, NDCG) są jednakowo niskie w wartościach bezwzględnych we wszystkich pięciu 
+        modelach, co odzwierciedla samą konfigurację ewaluacji: wybór 15 artykułów z puli około 1460 nieprzeczytanych 
+        kandydatów w zestawieniu z rozproszonym, niepełnym zbiorem testowym to naprawdę trudny problem z wyszukiwaniem. 
+        Ewaluacja online na żywo dałaby bardziej wiarygodny wynik dokładności bezwzględnej i pokazałaby, czy zastosowanie 
+        modeli opartych na DPP sprawia, że ​newsfeed użytkownika jest trafny.
+      </p>
+ 
+      
+    </div>
+ 
+    <div class="footer-nav">
+      <a href="../index-PL.html#projects">← Powrót do projektów</a>
+      <a href="transformer-nlp-app.html">Następny projekt →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

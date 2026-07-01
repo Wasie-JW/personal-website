@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quebec Forestry · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--olive); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 38px;
+    line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 600px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 24px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 16px; line-height: 1.75; color: var(--ink); margin: 0 0 16px; }
+  .project-body ul { padding-left: 20px; margin: 0 0 16px; }
+  .project-body li { font-size: 16px; line-height: 1.7; margin-bottom: 8px; }
+ 
+  .slide-shot {
+    width: 100%; border-radius: 4px; border: 1px solid rgba(20,23,28,0.15);
+    display: block; margin: 8px 0 6px;
+  }
+  .shot-caption { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--ink-soft); margin: 0 0 8px; }
+ 
+  .ownership-note {
+    background: rgba(107,115,65,0.08);
+    border-left: 4px solid var(--olive);
+    padding: 14px 20px;
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .ownership-note strong { color: var(--olive); }
+ 
+  /* GOAL CATEGORY GRID */
+  .goal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0 8px; }
+  .goal-card { background: var(--white); border-top: 4px solid var(--navy); padding: 18px 18px 16px; }
+  .goal-card.eco { border-top-color: var(--olive); }
+  .goal-card.social { border-top-color: var(--burgundy); }
+  .goal-card h4 {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); margin: 0 0 10px;
+  }
+  .goal-card ul { padding-left: 16px; margin: 0; }
+  .goal-card li { font-size: 13.5px; line-height: 1.55; margin-bottom: 6px; }
+ 
+  /* TIMELINE / STRATEGY FLOW */
+  .strategy-flow { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 8px; }
+  .strategy-step {
+    background: var(--white);
+    border-left: 4px solid var(--navy);
+    padding: 16px 22px;
+  }
+  .strategy-step h4 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 15.5px; margin: 0 0 6px;
+  }
+  .strategy-step p { font-size: 14.5px; margin: 0; color: var(--ink-soft); }
+  .strategy-step.outcome { border-left-color: var(--olive); background: rgba(107,115,65,0.07); }
+  .strategy-step.outcome h4 { color: var(--olive); }
+  .strategy-step.outcome p { color: var(--ink); }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Fall 2025 · Team Sociological Analysis</span>
+      </div>
+      <h1 class="project-title">Stakeholder Analysis of Quebec Forestry</h1>
+      <p class="project-intro">
+        A group analysis of Quebec's proposed Bill 97 forestry reform, mapping the goals, resources,
+        and strategies of one of the actors involved: the First Nations
+        communities whose land and treaty rights were directly at stake.
+      </p>
+      <div class="tag-row">
+        <span class="pill">Sustainability</span>
+        <span class="pill tool">Written Analysis</span>
+        <span class="pill badge">Teamwork</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">The issue</h2>
+      <p>
+        Bill 97 proposed restructuring Quebec's forest governance through a new three-zone land-use
+        model. For the province and forestry industry, this was framed as an economic and
+        administrative question. For First Nations communities, whose treaty rights to the forest
+        are protected under the James Bay Northern Quebec Agreement, it raised a more fundamental
+        question of sovereignty and self-determination over unceded land.
+      </p>
+ 
+      <div class="ownership-note">
+        <strong>My contribution:</strong> this was shared research, as we combined notes
+        across the whole group from the press kit. I designed and built the slide
+        below, mapping the First Nations' resources into material, community, and social/political
+        categories.
+      </div>
+ 
+      <img class="slide-shot" src="../assets/first-nations-resources-slide.jpg" alt="Slide showing First Nations resources categorized into Material, Community, and Social and Political columns">
+      <p class="shot-caption">The Resources slide — my contribution to the deck.</p>
+ 
+      <h2 class="section-title">What the First Nations were fighting for</h2>
+      <div class="goal-grid">
+        <div class="goal-card">
+          <h4>Political</h4>
+          <ul>
+            <li>Stop Bill 97</li>
+            <li>Full inclusion in legislative decisions</li>
+            <li>Uphold treaty &amp; constitutional rights</li>
+          </ul>
+        </div>
+        <div class="goal-card eco">
+          <h4>Ecological</h4>
+          <ul>
+            <li>Protect the land and ecosystem</li>
+            <li>Community-led forest management over logging</li>
+            <li>Wildlife protection for future generations</li>
+          </ul>
+        </div>
+        <div class="goal-card social">
+          <h4>Social</h4>
+          <ul>
+            <li>Preserve cultural &amp; spiritual continuity</li>
+            <li>Mutual respect between communities</li>
+          </ul>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Strategy and outcome</h2>
+      <p>
+        Facing a government with far greater institutional power, First Nations groups combined
+        several tracks of pressure simultaneously rather than relying on any single approach.
+      </p>
+      <div class="strategy-flow">
+        <div class="strategy-step">
+          <h4>Confrontation</h4>
+          <p>Organised protests and blockades, issued a symbolic eviction notice to companies violating existing agreements, and maintained sustained media presence.</p>
+        </div>
+        <div class="strategy-step">
+          <h4>Alliances</h4>
+          <p>Built coalitions with environmental groups and local citizens, and grounded their proposals in scientific evidence to broaden legitimacy beyond their own community.</p>
+        </div>
+        <div class="strategy-step">
+          <h4>Political &amp; legal action</h4>
+          <p>Refused to sign a non-disclosure agreement on government talks, invoked treaty and constitutional protections, and the AFNQL suspended discussions to publicly signal the government lacked genuine political will.</p>
+        </div>
+        <div class="strategy-step outcome">
+          <h4>Outcome</h4>
+          <p>The combined pressure — public, legal, and political — led Quebec premier François Legault to scrap the bill.</p>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Why this outcome matters</h2>
+      <p>
+        It's a useful counter-example to the Brazil coffee analysis I did separately: there,
+        less-resourced actors largely failed to shift outcomes. Here, a coordinated
+        strategy by a comparatively under-resourced actor did. The difference suggests that
+        coordination across alliance, legal, and media channels, not raw institutional power alone,
+        can shift outcomes when used together.
+      </p>
+ 
+    </div>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="brazil-coffee-case-study.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

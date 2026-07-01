@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau dashboard for business simulation · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--navy); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 38px;
+    line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 600px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.tool { background: rgba(122,35,51,0.1); color: var(--burgundy); }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 24px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 16px; line-height: 1.75; color: var(--ink); margin: 0 0 16px; }
+ 
+  /* DASHBOARD SCREENSHOT */
+  .dashboard-shot {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid rgba(20,23,28,0.15);
+    display: block;
+    margin: 8px 0 6px;
+  }
+  .shot-caption {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+ 
+  /* OWNERSHIP NOTE */
+  .ownership-note {
+    background: rgba(27,42,65,0.06);
+    border-left: 4px solid var(--navy);
+    padding: 14px 20px;
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .ownership-note strong { color: var(--navy); }
+ 
+  /* DECISION LOGIC BLOCKS */
+  .logic-block {
+    background: var(--white);
+    border-top: 4px solid var(--navy);
+    padding: 26px 28px;
+    margin-bottom: 18px;
+  }
+  .logic-block.sales { border-top-color: var(--burgundy); }
+  .logic-block h3 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 19px; margin: 0 0 14px;
+  }
+  .signal-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .signal-row:last-child { margin-bottom: 0; }
+  .dot {
+    width: 11px; height: 11px; border-radius: 50%;
+    flex-shrink: 0; margin-top: 4px;
+  }
+  .dot.red { background: #C0504D; }
+  .dot.green { background: #6B9E5E; }
+  .dot.orange { background: #D99A3D; }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Fall 2025 · Team simulation</span>
+      </div>
+      <h1 class="project-title">Tableau dashboard for a business simulation</h1>
+      <p class="project-intro">
+        My team ran a multi-round company simulation covering procurement, production, sales, and
+        accounting. My role was to design and build the dashboard the whole team used to make
+        coordinated, round-by-round decisions.
+      </p>
+      <div class="tag-row">
+        <span class="pill tool">Tableau</span>
+        <span class="pill">KPI tracking</span>
+        <span class="pill badge">Teamwork</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">The dashboard</h2>
+      <img class="dashboard-shot" src="../assets/tableau-dashboard.png" alt="Main Tableau dashboard showing Order Status, Profit Margin, Average Market Price, Current Inventory, and Round Sales Volume views">
+      <p class="shot-caption">The main dashboard view — inventory and procurement on the left, sales and pricing on the right.</p>
+ 
+ 
+      <h2 class="section-title">Structure</h2>
+      <p>
+        The dashboard is deliberately split in two: the left side supports factory and inventory decisions,
+        the right side supports sales and pricing decisions. Every chart uses colour — red, orange, green —
+        as a direct decision signal, so any team member could glance at it mid-round and know what to do
+        next without reading raw numbers.
+      </p>
+ 
+      <div class="logic-block">
+        <h3>Factory &amp; inventory</h3>
+        <div class="signal-row">
+          <span class="dot red"></span>
+          <span>A product showing red in <strong>Current Inventory</strong> is running low and needs to be reordered soon.</span>
+        </div>
+        <div class="signal-row">
+          <span class="dot orange"></span>
+          <span>If the product shows orange there is an overflow, so if it persists in that zone - communication with Sales team needed.</span>
+        </div>
+        <div class="signal-row">
+          <span class="dot green"></span>
+          <span>If it's green, it does not need any actions.</span>
+        </div>
+      </div>
+ 
+      <div class="logic-block sales">
+        <h3>Sales &amp; pricing</h3>
+        <div class="signal-row">
+          <span class="dot red"></span>
+          <span><strong>Profit Margin</strong> in red means prices are too low or the product isn't selling enough to cover storage costs — cross-check against the other charts before reacting.</span>
+        </div>
+        <div class="signal-row">
+          <span class="dot red"></span>
+          <span><strong>Round Sales Volume</strong> in red flags a product selling below its target volume that round, sorted most recent round first so the team sees current performance immediately.</span>
+        </div>
+        <div class="signal-row">
+          <span class="dot red"></span>
+          <span><strong>Market vs. Company Pricing</strong> in red means a price sits above the regional market average — read this as "room to reconsider," not an automatic problem, since the product may still be selling fine at that price.</span>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">What I'd do differently</h2>
+      <p>
+        I'd add an auto-refresh for the round filter — in practice, forgetting to
+        advance it meant the Profit Margin view could silently show stale data, which is exactly the kind
+        of error a decision-support tool should prevent rather than allow. Additionally, I'd have made clearer price &amp; marketing 
+        decision-making process, because knowing it needs to be changed, didn't mean knowing by how much.
+      </p>
+ 
+    </div>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="strategic-management-sim.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>
