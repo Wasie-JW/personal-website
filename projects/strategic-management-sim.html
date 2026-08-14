@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Management Simulation · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--olive); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 36px;
+    line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 580px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 23px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 15.5px; line-height: 1.75; color: var(--ink); margin: 0 0 14px; }
+ 
+  /* SIMULATION CONTEXT CARD */
+  .context-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0 8px;
+  }
+  .context-card {
+    background: var(--white); border-top: 4px solid var(--navy); padding: 18px 18px 16px;
+  }
+  .context-card h4 {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); margin: 0 0 8px;
+  }
+  .context-card p { font-size: 14px; line-height: 1.5; margin: 0; }
+  /* STORY MOMENTS — the key turning points from the reflection */
+  .moment {
+    border-left: 4px solid var(--olive);
+    padding: 18px 22px;
+    margin: 0 0 14px;
+    background: rgba(107,115,65,0.06);
+  }
+  .moment .moment-label {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--olive); display: block; margin-bottom: 8px;
+  }
+  .moment p { font-size: 14.5px; line-height: 1.7; margin: 0; color: var(--ink); }
+
+  /* MY ROLE — ownership note style */
+  .role-note {
+    background: rgba(107,115,65,0.08);
+    border-left: 4px solid var(--olive);
+    padding: 16px 22px; margin: 8px 0 8px;
+    font-size: 14.5px; line-height: 1.6; color: var(--ink);
+  }
+  .role-note strong { color: var(--olive); }
+ 
+  /* RED / BLUE OCEAN VISUAL */
+  .ocean-map {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin: 16px 0 8px;
+  }
+  .ocean-card { padding: 22px 20px; border-radius: 4px; }
+  .ocean-card.red { background: rgba(122,35,51,0.09); border-top: 4px solid var(--burgundy); }
+  .ocean-card.blue { background: rgba(27,42,65,0.08); border-top: 4px solid var(--navy); }
+  .ocean-card.patch { background: rgba(107,115,65,0.12); border-top: 4px solid var(--olive); }
+  .ocean-card .ocean-label {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 8px; display: block;
+  }
+  .ocean-card.red .ocean-label { color: var(--burgundy); }
+  .ocean-card.blue .ocean-label { color: var(--navy); }
+  .ocean-card.patch .ocean-label { color: var(--olive); }
+  .ocean-card h4 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 15.5px; margin: 0 0 8px;
+  }
+  .ocean-card p { font-size: 13.5px; line-height: 1.6; margin: 0; color: var(--ink-soft); }
+ 
+  /* OUTCOME STATS */
+  .outcome-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin: 8px 0 8px;
+  }
+  .outcome-box { background: var(--white); padding: 22px 22px; border-top: 5px solid var(--olive); }
+  .outcome-box.accent { border-top-color: var(--burgundy); }
+  .outcome-box .big-num {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 38px;
+    color: var(--olive); display: block; line-height: 1; margin-bottom: 6px;
+  }
+  .outcome-box.accent .big-num { color: var(--burgundy); }
+  .outcome-box .outcome-label {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; color: var(--ink-soft); line-height: 1.4;
+  }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+ 
+  @media (max-width: 600px) {
+    .context-grid, .ocean-map, .outcome-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Fall 2025 · Group Project</span>
+      </div>
+      <h1 class="project-title">Strategic Management Simulation</h1>
+      <p class="project-intro">
+        A multi-week business simulation in Globstrat where, as a team of 5, we made 
+        strategic decision for a company through 6 simulated years on a market with 9 direct competitors (other teams).
+      </p>
+      <div class="tag-row">
+        <span class="pill">KPI Tracking</span>
+        <span class="pill tool">Written Analysis</span>
+        <span class="pill badge">Teamwork</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">The setup</h2>
+      <div class="context-grid">
+        <div class="context-card">
+          <h4>Platform</h4>
+          <p>Globstrat business simulation software — real decision rounds, real competitive dynamics between teams</p>
+        </div>
+        <div class="context-card">
+          <h4>Auditing</h4>
+          <p>Initial group strategy presentation, weekly individual presentations on assigned topics, final group presentation to all classmates</p>
+        </div>
+        <div class="context-card">
+          <h4>My role</h4>
+          <p>R&amp;D Director, with acting Vice-CEO responsibilities when needed</p>
+        </div>
+      </div>
+            <div class="moment">
+        <span class="moment-label">Turning point 1 - Trial Round Misalignment</span>
+        <p>
+          Early on, we each focused on our own department, put numbers into Globstrat, and assumed
+          that was enough. It led to misalignment across the team and a rough first result. That
+          failure pushed me to read the documentation for every role: HR, marketing, finance -
+          not just R&amp;D. Understanding how the whole company worked changed how I approached
+          every decision after that.
+        </p>
+      </div>
+
+      <div class="moment">
+        <span class="moment-label">Turning point 2 - acting CEO day</span>
+        <p>
+          Our CEO had an exam on a decision day, and I was chosen to cover. I expected to check
+          the inputs and click submit. Instead I found myself negotiating alliances with other teams
+          and reorganising our entire budget from scratch. I was alone, with no time to consult
+          teammates. It was overwhelming, but it forced me to use everything I'd learned about
+          the company as a system, not just my own segment. I also managed to find room in the
+          budget for a joint venture after all decisions were already in, using the same analytical
+          judgment I apply in my technical work.
+        </p>
+      </div>
+
+      <h2 class="section-title">The strategic positioning insight</h2>
+      <p>
+        My individual presentation covered competitive positioning. Using Blue Ocean Strategy as a
+        framework, I mapped where each team sat in the market — and argued that we needed to take
+        a riskier path rather than compete on the same dimensions as everyone else.
+      </p>
+
+      <div class="ocean-map">
+        <div class="ocean-card red">
+          <span class="ocean-label">Where we were</span>
+          <h4>Red ocean</h4>
+          <p>Competing directly on the same product dimensions as most other teams — limited differentiation, real margin pressure.</p>
+        </div>
+        <div class="ocean-card blue">
+          <span class="ocean-label">Where one competitor was</span>
+          <h4>Blue ocean</h4>
+          <p>One team had found an uncontested space. Getting there fully wasn't realistic mid-simulation.</p>
+        </div>
+        <div class="ocean-card patch">
+          <span class="ocean-label">My recommendation</span>
+          <h4>Blue patch</h4>
+          <p>Skip one innovation step to leapfrog competitors — higher risk, but the only credible route to partial differentiation from our position.</p>
+        </div>
+      </div>
+
+      <p>
+        The team adopted the recommendation. Arriving at a more innovative product ahead of teams
+        that followed the standard progression paid off most visibly in the enterprise segment, where
+        we ended the simulation with the highest market share across all competing teams.
+      </p>
+
+      <h2 class="section-title">Outcomes</h2>
+      <div class="outcome-grid">
+        <div class="outcome-box accent">
+          <span class="big-num">#1</span>
+          <span class="outcome-label">enterprise market share across all 10 competing teams</span>
+        </div>
+        <div class="outcome-box accent">
+          <span class="big-num">#3</span>
+          <span class="outcome-label">share value among similar-profile companies out of 9 teams</span>
+        </div>
+        <div class="outcome-box">
+          <span class="big-num">↑ CSR</span>
+          <span class="outcome-label">steady growth in CSR index, as planned in initial strategy</span>
+        </div>
+        <div class="outcome-box">
+          <span class="big-num">↑ Q</span>
+          <span class="outcome-label">steady growth in Quality index throughout the simulation</span>
+        </div>
+      </div>
+
+      <h2 class="section-title">What I took away</h2>
+      <p>
+        This course gave me something my technical degree hadn't: the experience of making
+        consequential decisions in areas I didn't fully know, under time pressure, without the safety
+        net of a correct answer. I used my risk management knowledge to push for differentiation
+        while keeping a safety net in place — the same instinct I apply when designing an experiment
+        or choosing a model. The main lesson was that the broader your understanding of a system,
+        the better your analysis of any part of it. That applies to companies as much as it does
+        to data.
+      </p>
+
+    </div>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="quebec-forestry-analysis.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Management in Book Publishing · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--olive); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 36px;
+    line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 580px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 23px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 15.5px; line-height: 1.75; color: var(--ink); margin: 0 0 14px; }
+ 
+  /* SCOPE STRIP */
+  .scope-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0 8px;
+  }
+  .scope-card {
+    background: var(--white); border-top: 4px solid var(--navy); padding: 16px 18px;
+  }
+  .scope-card h4 {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); margin: 0 0 6px;
+  }
+  .scope-card p { font-size: 13.5px; line-height: 1.5; margin: 0; }
+ 
+  /* FREQUENCY-SEVERITY MATRIX */
+  .matrix-wrap { margin: 16px 0 8px; position: relative; }
+  .matrix-label-row {
+    display: flex; margin-left: 72px; margin-bottom: 4px;
+  }
+  .matrix-col-label {
+    flex: 1; text-align: center;
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); padding: 4px;
+  }
+  .matrix-body { display: flex; gap: 4px; }
+  .matrix-row-labels {
+    display: flex; flex-direction: column; gap: 4px; width: 68px; flex-shrink: 0;
+  }
+  .matrix-row-label {
+    flex: 1; display: flex; align-items: center; justify-content: flex-end;
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); padding-right: 8px; text-align: right;
+    line-height: 1.3;
+  }
+  .matrix-grid {
+    flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  }
+  /* quadrant order: top-left = high severity / low frequency,
+                     top-right = high severity / high frequency,
+                     bottom-left = low severity / low frequency,
+                     bottom-right = low severity / high frequency */
+  .quadrant {
+    background: var(--white); border-radius: 4px; padding: 14px 16px; min-height: 160px;
+  }
+  .quadrant.critical { border-top: 4px solid var(--burgundy); background: rgba(122,35,51,0.04); }
+  .quadrant.high    { border-top: 4px solid var(--burgundy); background: rgba(122,35,51,0.08); }
+  .quadrant.monitor { border-top: 4px solid rgba(20,23,28,0.2); }
+  .quadrant.routine { border-top: 4px solid var(--olive); background: rgba(107,115,65,0.05); }
+  .quadrant-label {
+    font-family: 'Space Mono', monospace; font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); margin-bottom: 10px; display: block;
+  }
+  .quadrant.critical .quadrant-label,
+  .quadrant.high .quadrant-label { color: var(--burgundy); }
+  .quadrant.routine .quadrant-label { color: var(--olive); }
+  .risk-chip {
+    display: inline-block; font-size: 11.5px; line-height: 1.4;
+    background: rgba(20,23,28,0.07); padding: 2px 7px; border-radius: 3px;
+    margin: 2px 2px 2px 0; color: var(--ink);
+  }
+  .matrix-caption {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; color: var(--ink-soft);
+    margin-top: 10px; line-height: 1.5;
+  }
+ 
+  /* KEY FINDINGS */
+  .findings-list { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+  .finding-row {
+    background: var(--white); border-left: 5px solid var(--burgundy);
+    padding: 16px 20px; display: grid; grid-template-columns: 1fr 2fr; gap: 16px; align-items: start;
+  }
+  .finding-row:nth-child(2) { border-left-color: var(--navy); }
+  .finding-row:nth-child(3) { border-left-color: var(--olive); }
+  .finding-label {
+    font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700;
+    color: var(--ink); line-height: 1.4;
+  }
+  .finding-desc { font-size: 14px; line-height: 1.65; color: var(--ink-soft); margin: 0; }
+ 
+  /* ORIGINAL INSIGHT CALLOUT */
+  .insight-callout {
+    background: var(--navy); color: var(--cream); padding: 28px 30px; border-radius: 4px; margin: 16px 0;
+  }
+  .insight-callout .label {
+    font-family: 'Space Mono', monospace; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: rgba(245,242,234,0.6); display: block; margin-bottom: 12px;
+  }
+  .insight-callout h4 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 19px;
+    margin: 0 0 12px; color: var(--cream);
+  }
+  .insight-callout p {
+    font-size: 15px; line-height: 1.7; margin: 0 0 10px;
+    color: rgba(245,242,234,0.85);
+  }
+  .insight-callout p:last-child { margin-bottom: 0; }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+ 
+  @media (max-width: 600px) {
+    .scope-strip { grid-template-columns: 1fr; }
+    .finding-row { grid-template-columns: 1fr; }
+    .matrix-row-labels { width: 50px; }
+  }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Fall 2025 · Risk Analysis Paper</span>
+      </div>
+      <h1 class="project-title">Risk Management - book publishing industry</h1>
+      <div class="tag-row">
+        <span class="pill tool">Written Analysis</span>
+        <span class="pill">Risk management</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">Scope</h2>
+      <div class="scope-strip">
+        <div class="scope-card">
+          <h4>Industry</h4>
+          <p>Global, national, and self-publishing book publishers — academic publishing excluded due to distinct risk profile</p>
+        </div>
+        <div class="scope-card">
+          <h4>Risk categories</h4>
+          <p>Operational, financial &amp; market, technological, legal &amp; IP, reputational &amp; climate</p>
+        </div>
+        <div class="scope-card">
+          <h4>Framework</h4>
+          <p>Frequency–severity matrix, assessed against current industry practices and academic literature</p>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Risk prioritisation matrix</h2>
+      <p>
+        Risks were positioned by how often they occur (frequency) and how damaging they are
+        when they do (severity). The most critical quadrant — high frequency, high severity —
+        demands active management; the low-low quadrant can be retained or monitored.
+      </p>
+ 
+      <div class="matrix-wrap">
+        <div class="matrix-label-row">
+          <div class="matrix-col-label">Low frequency</div>
+          <div class="matrix-col-label">High frequency</div>
+        </div>
+        <div class="matrix-body">
+          <div class="matrix-row-labels">
+            <div class="matrix-row-label">High severity</div>
+            <div class="matrix-row-label">Low severity</div>
+          </div>
+          <div class="matrix-grid">
+            <!-- High severity / Low frequency -->
+            <div class="quadrant critical">
+              <span class="quadrant-label">Mitigate or retain</span>
+              <span class="risk-chip">Paper shortages</span>
+              <span class="risk-chip">Production errors</span>
+              <span class="risk-chip">Management risks</span>
+              <span class="risk-chip">Exchange rate volatility*</span>
+              <span class="risk-chip">Credit risk from retailers**</span>
+              <span class="risk-chip">Reputational risks</span>
+              <span class="risk-chip">Climate risk</span>
+            </div>
+            <!-- High severity / High frequency -->
+            <div class="quadrant high">
+              <span class="quadrant-label">Priority — active management</span>
+              <span class="risk-chip">Over/under-production</span>
+              <span class="risk-chip">Demand model risk</span>
+              <span class="risk-chip">Market risk</span>
+              <span class="risk-chip">Cost inflation</span>
+              <span class="risk-chip">Revenue instability</span>
+              <span class="risk-chip">E-book piracy</span>
+            </div>
+            <!-- Low severity / Low frequency -->
+            <div class="quadrant monitor">
+              <span class="quadrant-label">Monitor</span>
+              <span class="risk-chip">Platform outages</span>
+              <span class="risk-chip">Generative AI competition</span>
+              <span class="risk-chip">Author–publisher disputes</span>
+              <span class="risk-chip">Regulatory shifts</span>
+              <span class="risk-chip">AI training ambiguity</span>
+            </div>
+            <!-- Low severity / High frequency -->
+            <div class="quadrant routine">
+              <span class="quadrant-label">Routine controls</span>
+              <span class="risk-chip">Printing &amp; editing errors</span>
+              <span class="risk-chip">Distribution delays</span>
+              <span class="risk-chip">Cybersecurity</span>
+              <span class="risk-chip">Global IP enforcement gaps</span>
+            </div>
+          </div>
+        </div>
+        <p class="matrix-caption">* Global publishers only &nbsp;·&nbsp; ** National/small publishers only</p>
+      </div>
+ 
+      <h2 class="section-title">Key findings</h2>
+      <div class="findings-list">
+        <div class="finding-row">
+          <span class="finding-label">The two biggest risks</span>
+          <p class="finding-desc">Supply chain cost inflation and demand model risk sit at the top of the priority stack — they're strongly correlated with each other, and managing them well reduces exposure across several other risk categories simultaneously.</p>
+        </div>
+        <div class="finding-row">
+          <span class="finding-label">Where practices fall short</span>
+          <p class="finding-desc">The industry overinvests in controlling medium-importance risks while underinvesting in forecasting. Current demand models rely on a narrow set of variables and don't capture important signals — publisher reputation, release season, distribution channel mix, or community-driven demand from platforms like Goodreads.</p>
+        </div>
+        <div class="finding-row">
+          <span class="finding-label">Recommendation</span>
+          <p class="finding-desc">Integrate LLM-driven analytics and external demand signals into forecasting processes. Richer models reduce the probability of stock mismatches — but scenario-based contingency planning (agile reprinting, expanded outlet partnerships) remains essential alongside any model, since Power's (2004) critique still applies: no model assumes a stable future.</p>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">Reputational risk in Eastern European publishing</h2>
+      <div class="insight-callout">
+        <span class="label">Own analysis</span>
+        <h4>Overmanaging reputation risk creates a different, larger risk</h4>
+        <p>
+          National publishers in Eastern Europe systematically avoid books on taboo or
+          controversial topics — LGBTQIA+ narratives, books by authors of colour, politically
+          sensitive subjects — until after they become proven international hits. By that point,
+          most readers have already bought or read the book in English from a global publisher.
+        </p>
+        <p>
+          The result: the reputational risk they're trying to avoid is real but manageable, while
+          the risk they create — chronic overproduction driven by established demand that's
+          already been captured elsewhere — is more costly and harder to recover from.
+        </p>
+        <p>
+          Longer term, this contributes to a generational shift in reading habits toward
+          English-language books, which erodes the core competitive advantage that national
+          publishers actually have: the ability to champion local authors writing in the native
+          language of their market.
+        </p>
+      </div>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="probit-modelling-r.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

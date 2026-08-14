@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probit Modelling · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--navy); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 36px;
+    line-height: 1.12; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 580px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.tool { background: rgba(122,35,51,0.1); color: var(--burgundy); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 23px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 15.5px; line-height: 1.75; color: var(--ink); margin: 0 0 14px; }
+ 
+  /* WHY PROBIT — two-col comparison */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin: 8px 0 16px; }
+  .compare-card { background: var(--white); border-top: 4px solid rgba(20,23,28,0.2); padding: 18px 20px; }
+  .compare-card.better { border-top-color: var(--olive); }
+  .compare-card h4 {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); margin: 0 0 10px;
+  }
+  .compare-card.better h4 { color: var(--olive); }
+  .compare-card p { font-size: 14px; line-height: 1.65; margin: 0 0 8px; color: var(--ink); }
+  .compare-card p:last-child { margin-bottom: 0; }
+  .fail-example {
+    font-family: 'Space Mono', monospace; font-size: 12.5px;
+    background: rgba(122,35,51,0.08); color: var(--burgundy);
+    padding: 6px 10px; border-radius: 3px; display: block; margin-top: 8px;
+  }
+ 
+  /* WHAT WAS BUILT — implementation steps */
+  .build-steps { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 8px; }
+  .build-step {
+    background: var(--white); border-left: 5px solid var(--navy);
+    padding: 18px 22px; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start;
+  }
+  .build-step:nth-child(2) { border-left-color: var(--burgundy); }
+  .build-step:nth-child(3) { border-left-color: var(--olive); }
+  .build-step:nth-child(4) { border-left-color: var(--navy); }
+  .step-num {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 22px;
+    color: rgba(20,23,28,0.15); line-height: 1; padding-top: 2px;
+  }
+  .step-content h4 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 15.5px; margin: 0 0 6px; }
+  .step-content p { font-size: 14px; line-height: 1.65; margin: 0; color: var(--ink-soft); }
+  .code-tag {
+    display: inline-block; font-family: 'Space Mono', monospace; font-size: 11.5px;
+    background: rgba(27,42,65,0.08); color: var(--navy);
+    padding: 2px 8px; border-radius: 3px; margin-top: 6px;
+  }
+ 
+  /* MARGINAL EFFECTS — conceptual question block */
+  .margeff-block {
+    background: var(--white); border-top: 4px solid var(--burgundy);
+    padding: 24px 26px; margin: 8px 0;
+  }
+  .margeff-block h4 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 16.5px; margin: 0 0 12px; }
+  .margeff-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
+  .margeff-option h5 {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--ink-soft); margin: 0 0 6px;
+  }
+  .margeff-option p { font-size: 14px; line-height: 1.6; margin: 0; color: var(--ink); }
+  .margeff-verdict {
+    border-top: 1px solid rgba(20,23,28,0.1); padding-top: 14px;
+    font-size: 14px; line-height: 1.6; color: var(--ink);
+  }
+ 
+  /* GITHUB NUDGE */
+  .github-note {
+    background: rgba(107,115,65,0.08); border-left: 4px solid var(--olive);
+    padding: 14px 20px; font-size: 14px; line-height: 1.6; color: var(--ink); margin: 16px 0;
+  }
+  .github-note strong { color: var(--olive); }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+ 
+  @media (max-width: 600px) {
+    .compare-grid, .margeff-row { grid-template-columns: 1fr; }
+    .build-step { grid-template-columns: 1fr; }
+    .step-num { display: none; }
+  }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index.html#projects">← All projects</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Spring 2025 · Econometric Modelling</span>
+      </div>
+      <h1 class="project-title">Probit Modelling in R</h1>
+      <p class="project-intro">
+        A from-scratch implementation of maximum likelihood estimation for a probit model in R —
+        no modelling packages used. Covers the full pipeline from data cleaning through gradient
+        optimisation to marginal effects, benchmarked against the Linear Probability Model.
+      </p>
+      <div class="tag-row">
+        <span class="pill">Econometrics</span>
+        <span class="pill tool">R</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">Why probit over OLS</h2>
+      <p>
+        The task was to model the probability of an individual investing after a marketing
+        campaign, using gender, prior activity, age, and age² as predictors. The naive approach —
+        OLS on a binary outcome (the Linear Probability Model) — has a structural flaw:
+      </p>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h4>Linear Probability Model (LPM)</h4>
+          <p>Estimates a linear regression on a 0/1 outcome. Simple, interpretable — but nothing stops it from predicting probabilities outside [0, 1].</p>
+          <span class="fail-example">Predicted P(invest) for a 99-year-old female with no prior activity: −0.16</span>
+        </div>
+        <div class="compare-card better">
+          <h4>Probit model</h4>
+          <p>Passes the linear index through the standard normal CDF, guaranteeing predictions stay in [0, 1] by construction. Estimated by maximum likelihood.</p>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">What was built</h2>
+      <div class="build-steps">
+        <div class="build-step">
+          <span class="step-num">1</span>
+          <div class="step-content">
+            <h4>Data preparation &amp; LPM baseline</h4>
+            <p>Constructed a binary investment dummy, removed incomplete observations using <code>na.omit</code>, then estimated the LPM from scratch — solving the OLS normal equations directly without using <code>lm()</code>. Reported estimates, standard errors, and t-statistics manually.</p>
+            <span class="code-tag">solve(t(X)%*%X, t(X)%*%y)</span>
+          </div>
+        </div>
+        <div class="build-step">
+          <span class="step-num">2</span>
+          <div class="step-content">
+            <h4>Log-likelihood &amp; gradient functions</h4>
+            <p>Implemented <code>loglikprobit()</code> and <code>gradprobit()</code> from first principles using <code>pnorm</code> and <code>dnorm</code> — the normal CDF and PDF. Both return the negative log-likelihood and negative score vector, ready for minimisation.</p>
+            <span class="code-tag">pnorm(X %*% b)</span>
+            <span class="code-tag">dnorm(X %*% b)</span>
+          </div>
+        </div>
+        <div class="build-step">
+          <span class="step-num">3</span>
+          <div class="step-content">
+            <h4>Maximum likelihood estimation</h4>
+            <p>Maximised the log-likelihood using BFGS optimisation, starting from the OLS estimates. Standard errors derived from the inverse Hessian at convergence. Results reported in a named table alongside the maximum log-likelihood value.</p>
+            <span class="code-tag">optim(..., method = "BFGS", hessian = TRUE)</span>
+          </div>
+        </div>
+        <div class="build-step">
+          <span class="step-num">4</span>
+          <div class="step-content">
+            <h4>Prediction plots &amp; model comparison</h4>
+            <p>Plotted predicted probability of investing as a function of age (11–99, 2-year intervals) for both the LPM and the probit, overlaid on the same graph. The probit curve remains in [0, 1] throughout; the LPM dips below zero at the extremes.</p>
+          </div>
+        </div>
+      </div>
+ 
+      <h2 class="section-title">The interesting question: marginal effects</h2>
+      <div class="margeff-block">
+        <h4>What is the marginal effect of gender for a 42-year-old with prior investment activity?</h4>
+        <div class="margeff-row">
+          <div class="margeff-option">
+            <h5>(i) Treating gender as continuous</h5>
+            <p>Derivative of the predicted probability with respect to gender at the given covariate values — computed separately for male and female profiles since the probit is non-linear.</p>
+          </div>
+          <div class="margeff-option">
+            <h5>(ii) Treating gender as discrete</h5>
+            <p>Direct difference in predicted probability between male and female profiles: P(invest | male, 42, active) − P(invest | female, 42, active).</p>
+          </div>
+        </div>
+        <p class="margeff-verdict">
+          <strong>Which to report:</strong> the discrete marginal effect — gender is a binary variable,
+          so the derivative treats it as locally continuous, which isn't meaningful here. The probability
+          difference between the two categories is the quantity that actually has an interpretation.
+        </p>
+      </div>
+ 
+    <div class="footer-nav">
+      <a href="../index.html#projects">← Back to all projects</a>
+      <a href="portfolio-optimisation.html">Next project →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantacja Kawy w Brazylii · Julia Wasielewska</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A41;
+    --navy-deep: #101B2C;
+    --burgundy: #7A2333;
+    --olive: #6B7341;
+    --cream: #F5F2EA;
+    --white: #FFFFFF;
+    --ink: #14171C;
+    --ink-soft: rgba(20,23,28,0.62);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink); font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 40px; }
+ 
+  .topbar { background: var(--navy); padding: 20px 0; }
+  .topbar-inner {
+    max-width: 760px; margin: 0 auto; padding: 0 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .topbar a.back {
+    font-family: 'Space Mono', monospace; font-size: 13px; color: var(--cream);
+    text-decoration: none; border-bottom: 2px solid var(--burgundy); padding-bottom: 2px;
+  }
+  .topbar a.back:hover { border-color: var(--olive); }
+  .topbar .name {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 15px;
+    color: var(--cream); text-transform: uppercase; letter-spacing: 0.02em;
+  }
+ 
+  .project-header { padding: 64px 0 36px; border-bottom: 1px solid rgba(20,23,28,0.12); }
+  .header-meta {
+    display: flex; gap: 16px; align-items: center; margin-bottom: 18px;
+    font-family: 'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); text-transform: uppercase;
+  }
+  .eng-toggle{
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    background: rgba(245,242,234,0.01);
+    border: 1px solid var(--ink-soft);
+    border-radius: 100px;
+    padding: 5px 14px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .eng-toggle:hover{
+    background: rgba(245,242,234,0.18);
+    color: var(--ink);
+    border-color:var(--ink);
+  }
+  .header-meta .stripe { width: 28px; height: 4px; background: var(--olive); }
+  h1.project-title {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 38px;
+    line-height: 1.1; letter-spacing: -0.01em; margin: 0 0 16px;
+  }
+  .project-intro { font-size: 16.5px; line-height: 1.7; color: var(--ink-soft); margin: 0 0 20px; max-width: 600px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    font-family: 'Space Mono', monospace; font-size: 12px; padding: 4px 11px;
+    border-radius: 100px; background: rgba(107,115,65,0.12); color: var(--olive); font-weight: 700;
+  }
+  .pill.badge { background: transparent; color: var(--ink-soft); border: 1px solid rgba(20,23,28,0.18); }
+ 
+  .project-body { padding: 44px 0 24px; }
+  .project-body h2.section-title {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 24px; margin: 48px 0 18px;
+  }
+  .project-body h2.section-title:first-child { margin-top: 0; }
+  .project-body p { font-size: 16px; line-height: 1.75; color: var(--ink); margin: 0 0 16px; }
+  .project-body ul { padding-left: 20px; margin: 0 0 16px; }
+  .project-body li { font-size: 16px; line-height: 1.7; margin-bottom: 8px; }
+ 
+  .ownership-note {
+    background: rgba(107,115,65,0.08);
+    border-left: 4px solid var(--olive);
+    padding: 14px 20px;
+    margin: 0 0 8px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .ownership-note strong { color: var(--olive); }
+ 
+  /* ACTOR MAP — full team's actor set, shown compactly as context */
+  .actor-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px;
+    margin: 8px 0 20px;
+  }
+  .actor-chip {
+    background: var(--white);
+    border-top: 3px solid rgba(20,23,28,0.15);
+    padding: 10px 8px;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.3;
+    color: var(--ink-soft);
+  }
+  .actor-chip.mine {
+    border-top-color: var(--olive);
+    color: var(--olive);
+    font-weight: 700;
+    background: rgba(107,115,65,0.08);
+  }
+ 
+  /* QUOTE / FINDING CALLOUT */
+  .stat-callout {
+    background: var(--white);
+    border-left: 4px solid var(--burgundy);
+    padding: 18px 22px;
+    margin: 18px 0;
+  }
+  .stat-callout .num {
+    font-family: 'Archivo', sans-serif; font-weight: 900; font-size: 28px; color: var(--burgundy);
+    display: block; margin-bottom: 4px;
+  }
+  .stat-callout p { margin: 0; font-size: 14.5px; color: var(--ink); }
+ 
+  /* THEORY TAG BLOCKS */
+  .theory-block {
+    background: var(--white);
+    border-top: 4px solid var(--navy);
+    padding: 22px 26px;
+    margin-bottom: 16px;
+  }
+  .theory-block h4 {
+    font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 17px; margin: 0 0 10px;
+  }
+  .theory-block p { font-size: 14.5px; line-height: 1.65; margin: 0; color: var(--ink); }
+ 
+  .footer-nav {
+    border-top: 2px solid var(--ink); margin-top: 56px; padding: 28px 0 60px;
+    display: flex; justify-content: space-between;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+  }
+  .footer-nav a { color: var(--ink); text-decoration: none; }
+  .footer-nav a:hover { color: var(--burgundy); }
+</style>
+</head>
+<body>
+ 
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="back" href="../index-PL.html#projects">← Wszystkie projekty</a>
+      <span class="name">Julia Wasielewska</span>
+    </div>
+  </div>
+ 
+  <div class="wrap">
+ 
+    <header class="project-header">
+      <div class="header-meta">
+        <span class="stripe"></span>
+        <span>Jesień 2025 · Zespołowa Analiza Pisemna</span>
+      </div>
+      <h1 class="project-title">Analiza socjologiczna plantacji kawy w Brazylii</h1>
+      <p class="project-intro">
+        Grupowy raport analizujący w jaki sposób masowa uprawa kawy w Brazylii
+        wpływa na różne społeczności i podważa zrównoważony rozwój ekonomiczny.
+        Mapujemy pięć grup interesariuszy, a następnie stosujemy teorię socjologiczną
+        aby wyjaśnić dlaczego utrzymuje się nierównowaga sił.
+      </p>
+      <div class="tag-row">
+        <span class="pill">Sustainability</span>
+        <span class="pill tool">Written Analysis</span>
+        <span class="pill badge">Teamwork</span>
+      </div>
+    </header>
+ 
+    <div class="project-body">
+ 
+      <h2 class="section-title">Mapa wszystkich interesariuszy</h2>
+      <p>
+        Jako grupa, wzięliśmy pod uwagę 5 grup interesariuszy kształtujących Brazylijski
+        przemysł kawowy. Każda z grup ma odmienne cele, zasoby i taktyki:
+      </p>
+      <div class="actor-row">
+        <div class="actor-chip">Korporacje</div>
+        <div class="actor-chip">Agrobiznes i duże gospodarstwa</div>
+        <div class="actor-chip">Miejscowi i rdzenni mieszkańcy</div>
+        <div class="actor-chip mine">Rząd Brazylii</div>
+        <div class="actor-chip">Międzynarodowe Rządy</div>
+      </div>
+ 
+      <div class="ownership-note">
+        <strong>Mój wkład</strong> Jestem autorką analizy brazylijskiego rządu oraz pełnej sekcji 
+        poświęconej zastosowaniu teorii do wniosków zespołu, w której zastosowałam teorię socjologiczną
+        aby wyjaśnić, dlaczego utrzymuje się brak równowagi między tymi aktorami.
+      </div>
+ 
+      <h2 class="section-title">Dylemat rządu</h2>
+      <p>
+        Mój rozdział skupił się na strukturalnie sprzecznej pozycji brazylijskiego rządu: eksport kawy jest kluczowym
+        źródłem dochodów narodowych, co daje państwu bodziec ekonomiczny do utrzymania wzrostu produkcji mimo że jest ono 
+        również organem odpowiedzialnym za egzekwowanie przepisów prawa pracy i ochrony środowiska, która narusza ten wzrost.
+      </p>
+      <ul>
+        <li>Publiczna "Dirty List" Ministerstwa Pracy wymienia pracodawców stosujących praktyki pracy przypominające niewolnictwo, 
+          ale egzekwowanie przepisów jest niespójne.</li>
+        <li>Monitoring satelitarny służy do wykrywania nielegalnego wylesiania, ale jest finansowany z dochodów z eksportu kawy, na których wzrost wycinane są drzewa.</li>
+        <li>Rząd jest pod presją międzynarodową, w tym z przepisami UE dotyczącymi wylesiania i działaniami handlowymi USA związanymi z pracą przymusową</li>
+      </ul>
+      <div class="stat-callout">
+        <span class="num">737,000 ha</span>
+        <p>Lasów straconych na rzecz uprawy kawy w Brazylii w latach 2001-2023, tą skalę mają zmniejszyć przepisy ochrony środowiska.</p>
+      </div>
+ 
+      <h2 class="section-title">Zastosowanie teorii: dlaczego nierównowaga się utrzymuje?</h2>
+      <p>
+        Mapa aktorów opracowana przez nasz zespół pokazała nierówną siłę. W mojej części teoretycznej wyjaśniłam mechanizm, który za tym stoi, opierając się na dwóch głównych teoriach:
+      </p>
+      <div class="theory-block">
+        <h4>Teoria Aktora-Sieci (Latour)</h4>
+        <p>
+          Żadna strategia aktora nie działa w izolacji, a korporacje, rząd i społeczności są powiązane w sieć, w kórej ruch każdego aktora kształtuje
+          opcje pozostałych. Siła w tej sieci wynika z gęstości powiązań aktora, a nie z pojedynczego atrybutu. Korporacje są silne głównie dlatego, że
+          jednocześnie znajdują się w centrum popytu, kapitału finansowego i infrastruktury. 
+        </p>
+      </div>
+      <div class="theory-block">
+        <h4>Kapitalizm rasowy i Kapitałocen</h4>
+        <p>
+          Brazylijska gospodarka kawowa ma strukturalne korzenie w XIX-wiecznych systemach plantacji, a udokumentowane współczesne
+          przypadki pracy przymusowej sugerują znaczącą ciągłość tej historycznej hierarchii. Analiza tego w perspektywie kapitałocenu, gdzie
+          sam kapitalizm jest motorem szkód ekologicznych, pomogła wyjaśnić, dlaczego dobrowolne rozwiązania, takie jak certyfikaty CSR, zazwyczaj
+          działają jedynie jako zabieg reputacyjny, a nie zmiana strukturalna.
+        </p>
+      </div>
+ 
+      <h2 class="section-title">Do czego doszliśmy</h2>
+      <p>
+        Wnioskiem raportu jest argument, że udokumentowane szkody i złe praktyki nie są przypadkami funkcjonalnego systemu. 
+        Są to przewidywalne rezultaty rynku zbudowanego tak, by zysk był priorytetem dla ludzi i ekosystemów. Prawdziwa zmiana
+        wymagałaby zmiany leżących u podstaw mechanizmów władzy, a nie tylko dodania kolejnych certyfikatów. To jest działanie 
+        w ramach idei zrównoważonego degrowth: produkcja mniejszej ilości, uproszczenie łańcuchów dostaw oraz odejście od domyślnego modelu maksymalizacji zysku ponad wszystko.
+      </p>
+ 
+    <div class="footer-nav">
+      <a href="../index-PL.html#projects">← Powrót do projektów</a>
+      <a href="transformer-nlp-app.html">Następny projekt →</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>
